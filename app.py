@@ -13,7 +13,7 @@ load_dotenv()
 
 app = FastAPI(
     title="WhatsApp / IG DM AI + Google Calendar Bot",
-    description="Bot conversacional con IA que responde dudas 24/7 y agenda citas en Google Calendar.",
+    description="Genera borradores de respuesta y crea citas en Google Calendar; Meta messaging is not implemented.",
     version="1.0.0",
 )
 
@@ -118,9 +118,9 @@ def verify_webhook(
 
 @app.post("/webhook/message")
 def receive_message(payload: IncomingMessage):
-    """Recibe un mensaje de WhatsApp/IG y devuelve la respuesta generada por IA."""
+    """Genera una respuesta, pero no la envía a WhatsApp o Instagram."""
     reply = generate_ai_reply(payload.message)
-    return {"channel": payload.channel, "to": payload.sender, "reply": reply}
+    return {"channel": payload.channel, "to": payload.sender, "reply": reply, "sent": False}
 
 
 @app.post("/appointments")
