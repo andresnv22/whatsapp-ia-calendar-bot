@@ -37,6 +37,7 @@ def test_receive_message(monkeypatch):
         )
     assert res.status_code == 200
     assert res.json()["reply"] == "Hola, ¿qué día prefieres?"
+    assert res.json()["sent"] is False
 
 
 def test_book_appointment_invalid_date():

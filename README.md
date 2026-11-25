@@ -1,6 +1,6 @@
 # WhatsApp / Instagram DM AI + Google Calendar Bot
 
-Bot en Python (FastAPI) para negocios locales (clínicas, odontólogos, barberías, inmobiliarias, restaurantes) que responde preguntas 24/7 con IA y agenda citas automáticamente en Google Calendar.
+Servicio en Python (FastAPI) que genera borradores de respuesta con OpenAI y crea citas en Google Calendar con credenciales configuradas. El endpoint de mensajes recibe un JSON simplificado: **no procesa el formato real de Meta ni envía respuestas a WhatsApp o Instagram**. No lo ofrezcas como bot de mensajería listo para producción.
 
 ## Características
 - **Webhook compatible con Meta (WhatsApp Cloud API / Instagram DM)**.
