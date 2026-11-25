@@ -10,12 +10,12 @@ load_dotenv()
 
 app = FastAPI(
     title="WhatsApp / IG DM AI + Google Calendar Bot",
-    description="Bot conversacional con IA que responde dudas 24/7 y agenda citas en Google Calendar.",
+    description="Demo de respuestas y agenda; el envío a Meta requiere una integración adicional.",
     version="1.0.0",
 )
 
 DEMO_MODE = os.getenv("DEMO_MODE", "true").lower() == "true"
-VERIFY_TOKEN = os.getenv("WHATSAPP_VERIFY_TOKEN", "mi_token_secreto")
+VERIFY_TOKEN = os.getenv("WHATSAPP_VERIFY_TOKEN")
 
 # Memoria simple en RAM para demo (en producción usar Redis o PostgreSQL)
 DEMO_CALENDAR: list[dict] = []
@@ -124,19 +124,22 @@ def verify_webhook(
     hub_challenge: Optional[str] = Query(None, alias="hub.challenge"),
 ):
     """Verificación estándar de Meta (WhatsApp Cloud API / Instagram)."""
-    if hub_mode == "subscribe" and hub_verify_token == VERIFY_TOKEN:
+    if VERIFY_TOKEN and hub_mode == "subscribe" and hub_verify_token == VERIFY_TOKEN:
         return int(hub_challenge) if hub_challenge and hub_challenge.isdigit() else hub_challenge
     raise HTTPException(status_code=403, detail="Token de verificación inválido")
 
 
 @app.post("/webhook/message")
 def receive_message(payload: IncomingMessage):
-    """Recibe un mensaje de WhatsApp/IG y devuelve la respuesta generada por IA."""
+    """Simula el procesamiento de un mensaje; no envía nada a Meta."""
+    if not DEMO_MODE:
+        raise HTTPException(status_code=501, detail="Meta webhook and outbound messaging are not implemented")
     reply = generate_ai_reply(payload.message)
     return {
         "channel": payload.channel,
         "to": payload.sender,
         "reply": reply,
+        "sent": False,
         "demo_mode": DEMO_MODE,
     }
 

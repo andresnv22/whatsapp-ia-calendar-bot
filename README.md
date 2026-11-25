@@ -1,6 +1,8 @@
 # WhatsApp / Instagram DM AI + Google Calendar Bot
 
-Bot en Python (FastAPI) para negocios locales (clínicas, odontólogos, barberías, inmobiliarias, restaurantes) que responde preguntas 24/7 con IA y agenda citas automáticamente en Google Calendar.
+Demo en Python (FastAPI) para negocios locales (clínicas, odontólogos, barberías, inmobiliarias, restaurantes) que genera respuestas con IA y puede crear citas en Google Calendar.
+
+**Estado:** el endpoint `/webhook/message` acepta un JSON simplificado y genera una respuesta, pero **no envía mensajes a WhatsApp o Instagram** ni procesa el formato real de sus webhooks. El evento de Calendar se crea solo con credenciales configuradas; de lo contrario se simula en memoria. Úsalo como demo hasta completar y verificar esas integraciones.
 
 ## Características
 - **Webhook compatible con Meta (WhatsApp Cloud API / Instagram DM)**.
