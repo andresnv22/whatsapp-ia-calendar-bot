@@ -1,35 +1,22 @@
-# WhatsApp / Instagram DM AI + Google Calendar Bot
+# WhatsApp AI + Google Calendar Bot
 
-Bot en Python (FastAPI) para negocios locales (clínicas, odontólogos, barberías, inmobiliarias, restaurantes) que responde preguntas 24/7 con IA y agenda citas automáticamente en Google Calendar.
+Agente conversacional de **WhatsApp Cloud API (Meta)** en Python (FastAPI) que responde consultas 24/7 con OpenAI (tool-calling) y agenda citas directamente en **Google Calendar**, verificando disponibilidad real y bloqueando dobles reservas.
 
-## Características
-- **Webhook compatible con Meta (WhatsApp Cloud API / Instagram DM)**.
-- **Respuestas con IA** (OpenAI `gpt-4o-mini` o modo demo local sin API keys).
-- **Agendamiento automático en Google Calendar** (Service Account o modo demo en memoria).
+## Qué incluye
+- **Verificación oficial de webhook de Meta** (`GET /webhook` y firma `X-Hub-Signature-256` con HMAC-SHA256 en `POST /webhook`).
+- **Deduplicación e historial en SQLite**: evita responder dos veces ante reintentos de Meta y recuerda el contexto reciente por usuario.
+- **Google Calendar real**: consulta bloques ocupados (`check_calendar_availability`), valida horarios de atención, fechas futuras y previene doble reserva (`BEGIN IMMEDIATE` + verificación en Calendar).
+- **Envío real por WhatsApp Graph API v21.0**.
 
-## Instalación rápida
+## Requisitos e instalación
 ```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
+uv sync
 cp .env.example .env
-uvicorn app:app --reload
+# Configura OPENAI_API_KEY, WHATSAPP_*, y coloca credentials.json de Google Service Account
+uv run uvicorn app:app --reload
 ```
 
-## Probar en modo demo (sin API keys)
-1. Salud del servidor:
+## Pruebas automatizadas
 ```bash
-curl http://127.0.0.1:8000/health
-```
-2. Simular mensaje de WhatsApp:
-```bash
-curl -X POST http://127.0.0.1:8000/webhook/message \
-  -H "Content-Type: application/json" \
-  -d '{"sender": "+573001112233", "message": "Hola, quiero agendar una cita", "channel": "whatsapp"}'
-```
-3. Agendar cita:
-```bash
-curl -X POST http://127.0.0.1:8000/appointments \
-  -H "Content-Type: application/json" \
-  -d '{"client_name": "Laura Gómez", "client_phone": "+573001112233", "service": "Valoración", "date_iso": "2026-11-26T15:00:00"}'
+uv run pytest
 ```

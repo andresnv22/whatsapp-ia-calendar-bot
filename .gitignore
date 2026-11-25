@@ -2,5 +2,7 @@ __pycache__/
 *.py[cod]
 .venv/
 .env
-*.xlsx
+*.db
+*.sqlite*
 credentials.json
+.pytest_cache/
